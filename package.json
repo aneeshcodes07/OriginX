@@ -1,0 +1,27 @@
+{
+  "name": "originx",
+  "version": "1.0.0",
+  "private": true,
+  "description": "OriginX — Intelligent Software Supply-Chain Security Intelligence Platform",
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix frontend run start",
+    "lint": "npm --prefix frontend run lint",
+    "backend": "python -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000",
+    "test:backend": "python -m pytest backend\\tests",
+    "test": "npm run test:backend"
+  },
+  "keywords": [
+    "security",
+    "supply-chain",
+    "dependency-security",
+    "ast-analysis",
+    "capability-extraction",
+    "threat-detection",
+    "originx"
+  ],
+  "author": "OriginX Security Team",
+  "license": "MIT"
+}

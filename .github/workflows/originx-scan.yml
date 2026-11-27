@@ -1,0 +1,45 @@
+name: OriginX Security Scan
+
+on:
+  pull_request:
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+      - 'requirements.txt'
+      - 'pyproject.toml'
+  push:
+    branches:
+      - main
+
+jobs:
+  originx-scan:
+    name: Software Supply-Chain Threat & Dependency Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install httpx pydantic
+
+      - name: Run OriginX Dependency Scanner
+        run: |
+          python -m app.cli.ci_scanner --manifest package.json --policy-fail BLOCK
+        env:
+          PYTHONPATH: backend
+          ORIGINX_API_URL: ${{ secrets.ORIGINX_API_URL || 'http://localhost:8000' }}
+
+      - name: Upload Security Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: originx-report
+          path: originx-report.json
